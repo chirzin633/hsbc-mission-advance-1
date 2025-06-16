@@ -56,7 +56,7 @@ export default function Admin() {
   return (
     <div className="font-[Lato] min-h-screen bg-[#FFFDF3]">
       <HeaderDashboard />
-      <div className="container xl:p-10 w-full">
+      <div className="p-4 xl:p-10">
         <h1 className="text-2xl font-extrabold mb-4">Admin Dashboard</h1>
         <p className="mb-4">Welcome to the admin dashboard. Here you can manage item and description</p>
         <div className="bg-white shadow-lg p-4">

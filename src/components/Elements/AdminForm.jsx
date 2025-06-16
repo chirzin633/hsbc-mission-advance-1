@@ -1,4 +1,5 @@
-export default function AdminForm({ form, handleChange, handleSubmit, editIndex }) {
+export default function AdminForm(props) {
+  const { form, handleChange, handleSubmit, editIndex } = props;
   return (
     <div className="bg-white shadow-lg p-4">
       <h1 className="text-xl font-bold mb-5">{editIndex === null ? "Create New Item" : "Edit Item"}</h1>

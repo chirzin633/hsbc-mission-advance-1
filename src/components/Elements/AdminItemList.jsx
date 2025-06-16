@@ -1,6 +1,7 @@
 import AdminTableRow from "./AdminTableRow";
 
-export default function AdminItemList({ items, handleEdit, handleDelete }) {
+export default function AdminItemList(props) {
+  const { items, handleEdit, handleDelete } = props;
   return (
     <div className="bg-white shadow-md p-6 rounded-lg my-5">
       <h2 className="text-xl font-bold mb-4">Item List</h2>

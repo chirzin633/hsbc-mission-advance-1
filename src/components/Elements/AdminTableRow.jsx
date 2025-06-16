@@ -1,4 +1,5 @@
-export default function AdminTableRow({ item, index, onEdit, onDelete }) {
+export default function AdminTableRow(props) {
+  const { item, index, onEdit, onDelete } = props;
   return (
     <tr className="border-t">
       <td className="px-4 py-3">{index + 1}</td>

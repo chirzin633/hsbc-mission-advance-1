@@ -4,14 +4,14 @@ import Divider from "../Elements/Divider";
 import GoogleLoginButton from "../Elements/GoogleLoginButton";
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import axios from "axios";
 
 export default function LoginForm() {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
 
-  function handleLogin(e) {
+  async function handleLogin(e) {
     e.preventDefault();
-
     const email = e.target.email.value.trim();
     const password = e.target.password.value.trim();
 
@@ -20,9 +20,19 @@ export default function LoginForm() {
       return;
     }
 
-    localStorage.setItem("email", email);
-    localStorage.setItem("password", password);
-    navigate("/dashboard");
+    try {
+      const res = await axios.get("https://685a53d39f6ef9611155e75f.mockapi.io/users");
+      const users = res.data;
+      const foundUser = users.find((user) => user.email === email && user.password === password);
+
+      if (foundUser) {
+        navigate("/dashboard");
+      } else {
+        setErrorMessage("Email atau Password Salah!");
+      }
+    } catch (err) {
+      setErrorMessage("Gagal terhubung ke server.", err);
+    }
   }
 
   function handleNavigate() {

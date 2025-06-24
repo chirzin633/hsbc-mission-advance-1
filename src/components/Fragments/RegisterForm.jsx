@@ -54,8 +54,7 @@ export default function RegisterForm() {
         phone: formData.phone,
         password: formData.password,
       });
-
-      setSuccess("Registrasi berhasil! Anda akan diarahkan ke halaman login...");
+      setSuccess(`Selamat ${res.data.name}! Registrasi anda berhasil.`);
       setTimeout(() => {
         navigate("/login");
       }, 2000);

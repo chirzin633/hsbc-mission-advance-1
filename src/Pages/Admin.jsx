@@ -75,6 +75,14 @@ export default function Admin() {
     }).format(value);
   }
 
+  function capitalizeEachWord(str) {
+    return str
+      .toLowerCase()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  }
+
   return (
     <div className="font-[Lato] min-h-screen bg-[#FFFDF3]">
       <HeaderDashboard />
@@ -84,7 +92,7 @@ export default function Admin() {
           <h1 className="text-2xl font-extrabold mb-4">Admin Dashboard</h1>
           <p className="mb-4">Welcome to the admin dashboard. Here you can manage item and description</p>
           <AdminForm form={form} handleChange={handleChange} handleSubmit={handleSubmit} editIndex={editIndex} />
-          <AdminItemList items={items} handleEdit={handleEdit} handleDelete={handleDelete} formatCurrency={formatCurrency} />
+          <AdminItemList items={items} handleEdit={handleEdit} handleDelete={handleDelete} formatCurrency={formatCurrency} capitalize={capitalizeEachWord} />
         </div>
       </div>
     </div>

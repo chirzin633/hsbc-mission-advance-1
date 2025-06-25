@@ -1,7 +1,7 @@
 import AdminTableRow from "./AdminTableRow";
 
 export default function AdminItemList(props) {
-  const { items, handleEdit, handleDelete, formatCurrency } = props;
+  const { items, handleEdit, handleDelete, formatCurrency, capitalize } = props;
   return (
     <div className="bg-white shadow-md p-6 rounded-lg my-5">
       <h2 className="text-xl font-bold mb-4">Item List</h2>
@@ -21,7 +21,7 @@ export default function AdminItemList(props) {
             </thead>
             <tbody className="text-gray-700">
               {items.map((item, index) => (
-                <AdminTableRow key={index} item={item} index={index} onEdit={handleEdit} onDelete={handleDelete} onCurrency={formatCurrency} />
+                <AdminTableRow key={index} item={item} index={index} onEdit={handleEdit} onDelete={handleDelete} onCurrency={formatCurrency} capitalize={capitalize} />
               ))}
             </tbody>
           </table>

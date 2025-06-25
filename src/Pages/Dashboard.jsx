@@ -3,11 +3,14 @@ import HeroTop from "../components/Elements/HeroTop";
 import CourseSection from "../components/Elements/CourseSection";
 import Newsletter from "../components/Elements/Newsletter";
 import Footer from "../components/Elements/Footer";
+import { useLocation } from "react-router";
 
 export default function Dashboard() {
+  const location = useLocation();
+  const email = location.state?.email;
   return (
     <div className="bg-[#FFFDF3] font-[Lato]">
-      <HeaderDashboard />
+      <HeaderDashboard email={email} />
       <main>
         <HeroTop
           title="Revolusi Pembelajaran: Temukan Ilmu Baru Melalui Platform Video Interaktif!"

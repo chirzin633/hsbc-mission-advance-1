@@ -1,66 +1,83 @@
-import { useEffect, useState } from "react";
 import HeaderDashboard from "../components/Elements/HeaderDashboard";
 import AdminForm from "../components/Elements/AdminForm";
 import AdminItemList from "../components/Elements/AdminItemList";
+import Sidebar from "../components/Elements/Sidebar";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function Admin() {
   const [items, setItems] = useState([]);
-  const [form, setForm] = useState({ name: "", description: "" });
   const [editIndex, setEditIndex] = useState(null);
+  const [form, setForm] = useState({ title: "", description: "", instructor: "", position: "", company: "", rating: "", price: "" });
 
   useEffect(() => {
-    const savedItems = JSON.parse(localStorage.getItem("adminItems") || "[]");
-    setItems(savedItems);
+    axios
+      .get("https://685a53d39f6ef9611155e75f.mockapi.io/items")
+      .then((res) => setItems(res.data))
+      .catch((err) => console.error("Gagal fetch data:", err));
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem("adminItems", JSON.stringify(items));
-  }, [items]);
-
-  const handleChange = (e) => {
+  function handleChange(e) {
     const { id, value } = e.target;
     setForm((prev) => ({ ...prev, [id]: value }));
-  };
+  }
 
-  const handleSubmit = () => {
-    if (!form.name || !form.description) {
-      alert("Nama dan deskripsi harus diisi");
+  function handleEdit(index) {
+    setEditIndex(index);
+    setForm(items[index]);
+  }
+
+  async function handleSubmit() {
+    if (!form.title || !form.instructor || !form.rating) {
+      alert("Field wajib tidak boleh kosong");
       return;
     }
-    if (editIndex === null) {
-      setItems((prev) => [...prev, form]);
-    } else {
-      const updated = [...items];
-      updated[editIndex] = form;
-      setItems(updated);
-      setEditIndex(null);
-    }
-    setForm({ name: "", description: "" });
-  };
 
-  const handleEdit = (index) => {
-    setForm(items[index]);
-    setEditIndex(index);
-  };
-
-  const handleDelete = (index) => {
-    if (!confirm("Yakin menghapus item ini?")) return;
-    const updated = items.filter((_, i) => i !== index);
-    setItems(updated);
-    if (editIndex === index) {
-      setForm({ name: "", description: "" });
-      setEditIndex(null);
+    try {
+      if (editIndex === null) {
+        const res = await axios.post("https://685a53d39f6ef9611155e75f.mockapi.io/items", form);
+        setItems((prev) => [...prev, res.data]);
+      } else {
+        const id = items[editIndex].id;
+        const res = await axios.put(`https://685a53d39f6ef9611155e75f.mockapi.io/items/${id}`, form);
+        const updated = [...items];
+        updated[editIndex] = res.data;
+        setItems(updated);
+        setEditIndex(null);
+      }
+      setForm({ title: "", description: "", instructor: "", position: "", company: "", rating: "", price: "" });
+    } catch (err) {
+      console.error("Gagal simpan", err);
     }
-  };
+  }
+
+  async function handleDelete(index) {
+    const id = items[index].id;
+    if (!confirm("Yakin ingin menghapus item ini?")) return;
+
+    try {
+      await axios.delete(`https://685a53d39f6ef9611155e75f.mockapi.io/items/${id}`);
+      setItems(items.filter((_, i) => i !== index));
+      if (editIndex === index) {
+        setEditIndex(null);
+        setForm({ title: "", description: "", instructor: "", position: "", company: "", rating: "", price: "" });
+      }
+    } catch (err) {
+      console.error("Gagal hapus", err);
+    }
+  }
 
   return (
     <div className="font-[Lato] min-h-screen bg-[#FFFDF3]">
       <HeaderDashboard />
-      <div className="p-4 xl:p-10">
-        <h1 className="text-2xl font-extrabold mb-4">Admin Dashboard</h1>
-        <p className="mb-4">Welcome to the admin dashboard. Here you can manage item and description</p>
-        <AdminForm form={form} handleChange={handleChange} handleSubmit={handleSubmit} editIndex={editIndex} />
-        <AdminItemList items={items} handleEdit={handleEdit} handleDelete={handleDelete} />
+      <div className="md:flex w-full">
+        <Sidebar />
+        <div className="p-4 md:px-10 w-full">
+          <h1 className="text-2xl font-extrabold mb-4">Admin Dashboard</h1>
+          <p className="mb-4">Welcome to the admin dashboard. Here you can manage item and description</p>
+          <AdminForm form={form} handleChange={handleChange} handleSubmit={handleSubmit} editIndex={editIndex} />
+          <AdminItemList items={items} handleEdit={handleEdit} handleDelete={handleDelete} />
+        </div>
       </div>
     </div>
   );

@@ -26,6 +26,7 @@ export default function LoginForm() {
       const foundUser = users.find((user) => user.email === email && user.password === password);
 
       if (foundUser) {
+        localStorage.setItem("email", foundUser.email);
         navigate("/dashboard", { state: { email: foundUser.email } });
       } else {
         setErrorMessage("Email atau Password Salah!");

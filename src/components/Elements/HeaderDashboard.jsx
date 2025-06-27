@@ -29,7 +29,6 @@ export default function HeaderDashboard(props) {
 
   function handleLogout() {
     localStorage.removeItem("email");
-    localStorage.removeItem("password");
     navigate("/login");
   }
 

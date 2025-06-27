@@ -4,6 +4,7 @@ import Dashboard from "./Pages/Dashboard";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import Admin from "./Pages/Admin";
 import SearchUser from "./Pages/SearchUser";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   return (
@@ -12,8 +13,22 @@ function App() {
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/admin" element={<Admin />} />
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <PrivateRoute>
+              <Admin />
+            </PrivateRoute>
+          }
+        />
         <Route path="/admin/search-user" element={<SearchUser />} />
       </Routes>
     </BrowserRouter>

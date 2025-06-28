@@ -7,6 +7,9 @@ export default function HeaderDashboard(props) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    const email = localStorage.getItem("email");
+    if (!email) return;
+
     async function fetchUser() {
       try {
         const res = await axios.get("https://685a53d39f6ef9611155e75f.mockapi.io/users/");
